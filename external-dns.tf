@@ -1,6 +1,6 @@
 locals {
   internal_domain = aws_route53_zone.internal.name
-  public_domain = aws_route53_zone.public.name
+  public_domain   = aws_route53_zone.public.name
   external_dns = {
     namespace = "external-dns"
     extra_args = {
@@ -8,7 +8,7 @@ locals {
       1 = "--zone-id-filter=${aws_route53_zone.internal.id}",
       2 = "--zone-id-filter=${aws_route53_zone.public.id}",
     }
-    value_file    = "values/external-dns.yaml"
+    value_file = "${path.module}/values/external-dns.yaml"
   }
 }
 
@@ -75,7 +75,7 @@ resource "helm_release" "external_dns" {
   ]
 
   depends_on = [
-     module.external_dns_irsa,
-     helm_release.metrics_server
+    module.external_dns_irsa,
+    helm_release.metrics_server
   ]
 }
