@@ -1,9 +1,6 @@
 terraform {
   required_version = ">= 1.3.7"
 
-  # NOTE(jm): a backend.conf file must be used to pass the backend into this module
-  backend "s3" {}
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
