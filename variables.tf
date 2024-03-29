@@ -86,23 +86,23 @@ variable "external_access_role_arns" {
 
 variable "waypoint_odr_namespace" {
   type        = string
-  description = "Namespace that the ODR iam role's service account presides."
+  description = "Namespace in which the ODR IAM Role's service account presides."
 }
 
 variable "waypoint_odr_service_account_name" {
   type        = string
-  description = "Service account that the ODR iam role should be assumable from."
+  description = "Service account which the ODR IAM Role should be assumable from."
 }
 
 variable "public_root_domain" {
   type        = string
-  description = "public root domain."
+  description = "The public root domain."
 }
 
 // NOTE: if you would like to create an internal load balancer, with TLS, you will have to use the public domain.
 variable "internal_root_domain" {
   type        = string
-  description = "internal root domain."
+  description = "The internal root domain."
 }
 
 variable "tags" {
