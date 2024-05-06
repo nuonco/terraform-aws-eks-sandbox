@@ -109,3 +109,9 @@ variable "tags" {
   type        = map(any)
   description = "List of custom tags to add to the install resources. Used for taxonomic purposes."
 }
+
+variable "enable_nginx_ingress_controller" {
+  type        = string
+  default     = "true"
+  description = "Toggle the nginx-ingress controller in the EKS cluster."
+}
