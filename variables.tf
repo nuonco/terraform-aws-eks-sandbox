@@ -50,12 +50,6 @@ variable "default_instance_type" {
   description = "The EC2 instance type to use for the EKS cluster's default node group."
 }
 
-variable "admin_access_role_arn" {
-  description = "Optional role to provide admin access to the cluster."
-  type        = string
-  default     = ""
-}
-
 variable "additional_tags" {
   type        = map(any)
   description = "Extra tags to append to the default tags that will be added to install resources."
@@ -72,16 +66,6 @@ variable "nuon_id" {
 variable "region" {
   type        = string
   description = "The region to launch the cluster in"
-}
-
-variable "assume_role_arn" {
-  type        = string
-  description = "The role arn to assume during provisioning of this sandbox."
-}
-
-variable "external_access_role_arns" {
-  type        = list(string)
-  description = "Roles for external access to the cluster."
 }
 
 variable "waypoint_odr_namespace" {
@@ -114,4 +98,9 @@ variable "enable_nginx_ingress_controller" {
   type        = string
   default     = "true"
   description = "Toggle the nginx-ingress controller in the EKS cluster."
+}
+
+variable "runner_install_role" {
+  type        = string
+  description = "The role that is used to install the runner, and should be granted access."
 }

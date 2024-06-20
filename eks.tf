@@ -9,33 +9,15 @@ locals {
 
   # allow installing the runner in the cluster
   aws_auth_role_install_access = {
-    rolearn  = var.external_access_role_arns[0],
+    rolearn  = var.runner_install_role,
     username = "install:{{SessionName}}"
     groups = [
       "system:masters",
     ]
   }
-  # Allow for updates via terraform
-  aws_auth_role_terraform_access = {
-    rolearn  = var.assume_role_arn
-    username = "terraform:{{SessionName}}"
-    groups = [
-      "system:masters",
-    ]
-  }
-  # give vendor admin access to cluster
-  aws_auth_role_admin_access = {
-    rolearn  = var.admin_access_role_arn
-    username = "terraform:{{SessionName}}"
-    groups = [
-      "system:masters",
-    ]
-  }
+
   # only add admin access role if variable was set
-  aws_auth_roles = (var.admin_access_role_arn == "" ?
-    [local.aws_auth_role_install_access, local.aws_auth_role_terraform_access] :
-    [local.aws_auth_role_install_access, local.aws_auth_role_terraform_access, local.aws_auth_role_admin_access]
-  )
+  aws_auth_roles = [local.aws_auth_role_install_access]
 }
 
 resource "aws_kms_key" "eks" {

@@ -15,13 +15,13 @@ resource "aws_route53_zone" "public" {
 
 resource "aws_route53_record" "caa" {
   zone_id = aws_route53_zone.public.zone_id
-  name = var.public_root_domain
-  type = "CAA"
-  ttl = 300
+  name    = var.public_root_domain
+  type    = "CAA"
+  ttl     = 300
   records = [
-  "0 issue \"letsencrypt.org\"",
-  "0 issue \"amazon.com\"",
-  "0 issue \"amazonaws.com\"",
-  "0 issue \"amazontrust.com\"",
+    "0 issue \"letsencrypt.org\"",
+    "0 issue \"amazon.com\"",
+    "0 issue \"amazonaws.com\"",
+    "0 issue \"amazontrust.com\"",
   ]
 }
