@@ -107,6 +107,7 @@ Resources:
               - eks:DescribeAddon
               - eks:DescribeAddonConfiguration
               - eks:DescribeAddonVersions
+              - eks:UpdateAddon
               - iam:AttachRolePolicy
               - iam:CreateOpenIDConnectProvider
               - iam:UpdateAssumeRolePolicy
