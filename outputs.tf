@@ -1,6 +1,7 @@
 output "runner" {
   value = {
-    odr_iam_role_arn = module.odr_iam_role.iam_role_arn
+    odr_iam_role_arn    = module.odr_iam_role.iam_role_arn
+    runner_iam_role_arn = module.odr_iam_role.iam_role_arn
   }
   description = "A map of runner attributes: odr_iam_role_arn."
 }
