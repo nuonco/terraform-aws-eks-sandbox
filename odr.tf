@@ -14,7 +14,6 @@ resource "aws_iam_policy" "odr" {
 module "odr_iam_role" {
   # NOTE: the iam role requires the cluster be created, but you can not reference the cluster module in the for_each
   # loop that the eks module uses to iterate over cluster_service_accounts
-  depends_on = [module.eks, aws_iam_policy.odr]
 
   source      = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
   version     = ">= 5.1.0"
@@ -30,4 +29,6 @@ module "odr_iam_role" {
   role_policy_arns = {
     custom = aws_iam_policy.odr.arn
   }
+
+  depends_on = [aws_iam_policy.odr]
 }

@@ -51,6 +51,7 @@ resource "helm_release" "cert_manager" {
 
   depends_on = [
     module.cert_manager_irsa,
-    helm_release.external_dns
+    helm_release.external_dns,
+    module.eks,
   ]
 }

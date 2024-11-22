@@ -1,18 +1,14 @@
 terraform {
-  required_version = ">= 1.3.7"
+  required_version = ">= 1.5.4"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.0"
-      # This is required in order for the calling TF project to pass in both the default and the no_tags aws providers.
-      # Everything works fine in the calling project, but this causes `terraform validate` to fail when run against this module itself.
-      # Apparently, this is a bug in Terraform: https://github.com/hashicorp/terraform/issues/28490
-      configuration_aliases = [aws.no_tags]
+      version = ">= 5.68.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.4"
+      version = ">= 2.16.1"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
@@ -20,7 +16,7 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = ">= 2.13.1"
+      version = ">= 2.33.0"
     }
   }
 }

@@ -27,7 +27,7 @@ resource "helm_release" "ebs_csi" {
   name       = local.ebs_csi.name
   repository = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
   chart      = "aws-ebs-csi-driver"
-  version    = "2.13.0"
+  version    = "2.16.0"
 
   values = [
     yamlencode({
