@@ -65,27 +65,7 @@ module "eks" {
           }
         }
       }
-    },
-    # TODO(fd): we should have this passed in as an input in case this ever changes
-    "odr-${local.cluster_name}" = {
-      principal_arn     = module.odr_iam_role.iam_role_arn
-      kubernetes_groups = [] # superceded by AmazonEKSClusterAdminPolicy
-      policy_associations = {
-        cluster_admin = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-          access_scope = {
-            type = "cluster"
-          }
-        }
-        eks_admin = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-          access_scope = {
-            type = "cluster"
-          }
-        }
-      }
     }
-
   }
 
   node_security_group_additional_rules = {}

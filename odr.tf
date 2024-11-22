@@ -30,5 +30,8 @@ module "odr_iam_role" {
     custom = aws_iam_policy.odr.arn
   }
 
-  depends_on = [aws_iam_policy.odr]
+  depends_on = [
+    aws_iam_policy.odr,
+    module.eks,
+  ]
 }
