@@ -55,7 +55,6 @@ Resources:
               - ec2:AttachInternetGateway
               - ec2:AuthorizeSecurityGroupEgress
               - ec2:AuthorizeSecurityGroupIngress
-              - ec2:AuthorizeSecurityGroupIngress
               - ec2:CreateInternetGateway
               - ec2:CreateLaunchTemplate
               - ec2:CreateLaunchTemplateVersion
@@ -151,6 +150,7 @@ Resources:
               - kms:UntagResource
               - logs:CreateLogGroup
               - logs:DescribeLogGroups
+              - logs:ListTagsForResource
               - logs:ListTagsLogGroup
               - logs:PutRetentionPolicy
               - logs:TagLogGroup
@@ -254,7 +254,9 @@ Resources:
               - kms:ScheduleKeyDeletion
               - logs:DeleteLogGroup
               - logs:DescribeLogGroups
+              - logs:ListTagsForResource
               - logs:ListTagsLogGroup
+              - logs:UntagResource
               - route53:ChangeTagsForResource
               - route53:DeleteHostedZone
               - route53:GetDNSSEC
