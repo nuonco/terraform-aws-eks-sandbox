@@ -76,12 +76,6 @@ module "eks" {
       max_size       = local.max_size
       desired_size   = local.desired_size
 
-      # NOTE(fd): automate the update of this on a regular interval
-      launch_template = {
-        name    = "default-2024112202580872790000001a"
-        version = 2
-      }
-
       iam_role_additional_policies = {
         additional = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       }
