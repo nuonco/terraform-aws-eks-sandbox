@@ -4,8 +4,9 @@ Turnkey AWS EKS sandbox for Nuon apps.
 
 ## Usage
 
-This module can be used via the [aws-eks](github.com/nuonco/sandboxes/aws-eks)
-project in [nuonco/sandboxes](github.com/nuonco/sandboxes).
+This module can be used via the
+[aws-eks](https://github.com/nuonco/sandboxes/aws-eks) project in
+[nuonco/sandboxes](https://github.com/nuonco/sandboxes).
 
 ```hcl
 resource "nuon_app" "my_eks_app" {
