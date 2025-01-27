@@ -17,6 +17,7 @@ output "cluster" {
     platform_version           = module.eks.cluster_platform_version
     status                     = module.eks.cluster_status
     oidc_issuer_url            = module.eks.cluster_oidc_issuer_url
+    oidc_provider_arn          = module.eks.oidc_provider_arn
     cluster_security_group_id  = module.eks.cluster_security_group_id
     node_security_group_id     = module.eks.node_security_group_id
   }
