@@ -79,6 +79,41 @@ module "eks" {
       iam_role_additional_policies = {
         additional = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       }
+    },
+    inferentia = {
+      instance_types = ["inf2.8xlarge"]
+      min_size       = 1
+      max_size       = 3
+      desired_size   = 2
+
+      ami_type = "AL2023_x86_64_NEURON"
+
+      // disk size
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = 50
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 125
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+
+      taints = [
+        {
+          key    = "aws.amazon.com/neuron"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+
+      iam_role_additional_policies = {
+        additional = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      }
     }
   }
 
