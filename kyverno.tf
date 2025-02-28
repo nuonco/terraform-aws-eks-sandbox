@@ -13,7 +13,7 @@ resource "helm_release" "kyverno" {
   name       = "kyverno"
   repository = "https://kyverno.github.io/kyverno/"
   chart      = "kyverno"
-  version    = "1.13.4" // TODO: make an input var?
+  version    = "1.13.0" // TODO: make an input var?
 
   values = [
     file(local.kyverno.value_file),
