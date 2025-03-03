@@ -49,6 +49,65 @@ resource "helm_release" "cert_manager" {
     value = "1001"
   }
 
+  values = [
+    yamlencode({
+      tolerations = [
+        {
+          key    = "CriticalAddonsOnly"
+          value  = "true"
+          effect = "NoSchedule"
+        },
+        {
+          key    = "karpenter.sh/controller"
+          value  = "true"
+          effect = "NoSchedule"
+        },
+      ]
+      webhook = {
+        tolerations = [
+          {
+            key    = "CriticalAddonsOnly"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+          {
+            key    = "karpenter.sh/controller"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+        ]
+      }
+      cainjector = {
+        tolerations = [
+          {
+            key    = "CriticalAddonsOnly"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+          {
+            key    = "karpenter.sh/controller"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+        ]
+      }
+      startupapicheck = {
+        tolerations = [
+          {
+            key    = "CriticalAddonsOnly"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+          {
+            key    = "karpenter.sh/controller"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+        ]
+      }
+    }),
+  ]
+
   depends_on = [
     module.cert_manager_irsa,
     helm_release.external_dns,

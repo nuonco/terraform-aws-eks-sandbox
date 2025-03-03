@@ -35,7 +35,25 @@ module "eks" {
   }
 
   cluster_addons = {
-    coredns                = {}
+    coredns = {
+      configuration_values = jsonencode({
+        tolerations = [
+          # Allow CoreDNS to run on the same nodes as the Karpenter controller
+          # for use during cluster creation when Karpenter nodes do not yet exist
+          #
+          {
+            key    = "karpenter.sh/controller"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+          {
+            key : "CriticalAddonsOnly"
+            value : "true"
+            effect : "NoSchedule"
+          },
+        ]
+      })
+    }
     eks-pod-identity-agent = {}
     kube-proxy             = {}
     vpc-cni = {
@@ -70,11 +88,27 @@ module "eks" {
 
   node_security_group_additional_rules = {}
   eks_managed_node_groups = {
-    default = {
+    karpenter = {
       instance_types = local.instance_types
       min_size       = local.min_size
       max_size       = local.max_size
       desired_size   = local.desired_size
+
+      # Used to ensure Karpenter runs on nodes that it does not manage
+      labels = {
+        "karpenter.sh/controller" = "true"
+      }
+      # won't schedule on nodes it manages
+      taints = {
+        karpenter = {
+          key    = "karpenter.sh/controller"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      }
+      tags = {
+        "karpenter.sh/discovery" = local.karpenter.discovery_value
+      }
 
       iam_role_additional_policies = {
         additional = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
@@ -82,12 +116,12 @@ module "eks" {
     }
   }
 
-  # HACK: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1986
-  node_security_group_tags = {
+  node_security_group_tags = merge(local.tags, {
     "kubernetes.io/cluster/${var.nuon_id}" = null
-  }
+    "karpenter.sh/discovery"               = local.karpenter.discovery_value
+  })
 
-  # this can't rely on default_tags.
-  # full set of tags must be specified here :sob:
-  tags = local.tags
+  tags = merge(local.tags, {
+    "karpenter.sh/discovery" = local.karpenter.discovery_value
+  })
 }

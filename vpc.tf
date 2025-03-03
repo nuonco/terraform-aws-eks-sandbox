@@ -47,5 +47,6 @@ module "vpc" {
     "kubernetes.io/cluster/${var.nuon_id}" = "shared"
     "kubernetes.io/role/internal-elb"      = 1
     "visibility"                           = "private"
+    (local.karpenter.discovery_key)        = local.karpenter.discovery_value
   }
 }

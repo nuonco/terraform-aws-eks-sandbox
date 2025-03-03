@@ -60,6 +60,23 @@ resource "helm_release" "alb-ingress-controller" {
     value = module.alb_controller_irsa.iam_role_arn
   }
 
+  values = [
+    yamlencode({
+      tolerations = [
+        {
+          key    = "CriticalAddonsOnly"
+          value  = "true"
+          effect = "NoSchedule"
+        },
+        {
+          key    = "karpenter.sh/controller"
+          value  = "true"
+          effect = "NoSchedule"
+        },
+      ]
+    })
+  ]
+
   depends_on = [
     helm_release.cert_manager,
     module.alb_controller_irsa,

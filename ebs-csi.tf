@@ -31,21 +31,26 @@ resource "helm_release" "ebs_csi" {
 
   values = [
     yamlencode({
-      node : {
-        tolerateAllTaints : true
+      node = {
+        tolerateAllTaints = true
       }
-      controller : {
-        k8sTagClusterId : module.eks.cluster_name
-        serviceAccount : {
-          annotations : {
-            "eks.amazonaws.com/role-arn" : module.ebs_csi_irsa.iam_role_arn
+      controller = {
+        k8sTagClusterId = module.eks.cluster_name
+        serviceAccount = {
+          annotations = {
+            "eks.amazonaws.com/role-arn" = module.ebs_csi_irsa.iam_role_arn
           }
         }
-        tolerations : [
+        tolerations = [
           {
-            key : "CriticalAddonsOnly"
-            value : "true"
-            effect : "NoSchedule"
+            key    = "CriticalAddonsOnly"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+          {
+            key    = "karpenter.sh/controller"
+            value  = "true"
+            effect = "NoSchedule"
           },
         ]
       }

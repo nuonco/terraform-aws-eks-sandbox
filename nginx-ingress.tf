@@ -15,6 +15,25 @@ resource "helm_release" "nginx-ingress-controller" {
     value = "true"
   }
 
+  values = [
+    yamlencode({
+      controller = {
+        tolerations = [
+          {
+            key    = "CriticalAddonsOnly"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+          {
+            key    = "karpenter.sh/controller"
+            value  = "true"
+            effect = "NoSchedule"
+          },
+        ]
+      }
+    })
+  ]
+
   depends_on = [
     module.alb_controller_irsa,
     helm_release.alb-ingress-controller
