@@ -16,7 +16,7 @@ locals {
 #       but the role is immutable on the ec2nodeclass
 resource "aws_iam_instance_profile" "karpenter" {
   name = "KarpenterNodeInstanceProfile-${local.karpenter.cluster_name}"
-  role = module.eks.eks_managed_node_groups["karpenter"].iam_role_arn
+  role = module.eks.eks_managed_node_groups["karpenter"].iam_role_name
 }
 
 module "karpenter" {
