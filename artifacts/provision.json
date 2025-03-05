@@ -106,7 +106,15 @@
         "route53:ChangeResourceRecordSets",
         "s3:GetObject",
         "s3:ListBucket",
-        "s3:PutObject"
+        "s3:PutObject",
+        "events:*",
+        "sqs:*",
+        "iam:CreateInstanceProfile",
+        "iam:GetInstanceProfile",
+        "iam:AddRoleToInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile",
+        "iam:DeleteInstanceProfile",
+        "iam:TagInstanceProfile"
       ],
       "Resource": "*"
     }
