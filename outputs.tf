@@ -25,6 +25,14 @@ output "cluster" {
   description = "A map of EKS cluster attributes: arn, certificate_authority_data, endpoint, name, platform_version, status, oidc_issuer_url, cluster_security_group_id, node_security_group_id."
 }
 
+// TODO: determine a better name/location for this
+output "karpenter" {
+  value = {
+    instance_profile = resource.aws_iam_instance_profile.karpenter
+  }
+  description = "Instance profile for Karpenter `EC2NodeClass`es."
+}
+
 output "vpc" {
   // NOTE: these are declared here -
   // https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest?tab=outputs
