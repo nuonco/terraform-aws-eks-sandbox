@@ -23,7 +23,7 @@ module "odr_iam_role" {
   role_path = "/nuon/"
 
   cluster_service_accounts = {
-    (var.nuon_id) = ["${var.waypoint_odr_namespace}:${var.waypoint_odr_service_account_name}"]
+    (module.eks.cluster_name) = ["${var.waypoint_odr_namespace}:${var.waypoint_odr_service_account_name}"]
   }
 
   role_policy_arns = {
