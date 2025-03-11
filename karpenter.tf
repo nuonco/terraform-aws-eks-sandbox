@@ -8,6 +8,7 @@ locals {
     version         = "1.2.2"
     discovery_key   = "karpenter.sh/discovery"
     discovery_value = local.cluster_name
+    zone_prefix     = join("-", slice(split("-", local.region), 0, 1))
   }
 }
 
@@ -225,9 +226,9 @@ resource "kubectl_manifest" "karpenter_nodepool_default" {
               key      = "topology.kubernetes.io/zone"
               operator = "In"
               values = [ // this requires refinement
-                "us-east-2a",
-                "us-east-2b",
-                "us-east-2c",
+                "${var.region}a",
+                "${var.region}b",
+                "${var.region}c",
               ]
             },
           ]
