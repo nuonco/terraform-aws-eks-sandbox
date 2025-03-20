@@ -38,14 +38,14 @@ module "vpc" {
   #create_elasticache_subnet_group = true
 
   public_subnet_tags = {
-    "kubernetes.io/cluster/${var.nuon_id}" = "shared"
-    "kubernetes.io/role/elb"               = 1
-    "visibility"                           = "public"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+    "kubernetes.io/role/elb"                    = 1
+    "visibility"                                = "public"
   }
 
   private_subnet_tags = {
-    "kubernetes.io/cluster/${var.nuon_id}" = "shared"
-    "kubernetes.io/role/internal-elb"      = 1
-    "visibility"                           = "private"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+    "kubernetes.io/role/internal-elb"           = 1
+    "visibility"                                = "private"
   }
 }
