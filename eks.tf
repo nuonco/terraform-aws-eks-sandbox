@@ -85,7 +85,7 @@ module "eks" {
   # NOTE(fd): revisit the need for this
   # HACK: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1986
   node_security_group_tags = {
-    "kubernetes.io/cluster/${var.cluster_name}" = null
+    "kubernetes.io/cluster/${local.cluster_name}" = null
   }
 
   # this can't rely on default_tags.
