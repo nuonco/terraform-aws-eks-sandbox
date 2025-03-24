@@ -104,3 +104,9 @@ variable "runner_install_role" {
   type        = string
   description = "The role that is used to install the runner, and should be granted access."
 }
+
+variable "admin_access_role" {
+  type        = string
+  default     = ""
+  description = "A role that be granted access cluster AmazonEKSAdminPolicy and AmazonEKSClusterAdminPolicy access."
+}

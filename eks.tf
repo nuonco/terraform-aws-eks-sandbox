@@ -6,6 +6,51 @@ locals {
   min_size       = var.min_size
   max_size       = var.max_size
   desired_size   = var.desired_size
+
+  // access entries
+
+  default_access_entries = {
+    "install:{{SessionName}}" = {
+      principal_arn     = var.runner_install_role
+      kubernetes_groups = [] # superceded by AmazonEKSClusterAdminPolicy
+      policy_associations = {
+        cluster_admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+        eks_admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
+
+  access_entries = var.admin_access_role == "" ? local.default_access_entries : merge(local.default_access_entries, {
+    "admin" = {
+      principal_arn     = var.admin_access_role,
+      kubernetes_groups = []
+      policy_associations = {
+        cluster_admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+        eks_admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+    }
+  )
 }
 
 provider "aws" {
@@ -47,26 +92,7 @@ module "eks" {
   authentication_mode                      = "API_AND_CONFIG_MAP"
   enable_cluster_creator_admin_permissions = false
 
-  access_entries = {
-    "install:{{SessionName}}" = {
-      principal_arn     = var.runner_install_role
-      kubernetes_groups = [] # superceded by AmazonEKSClusterAdminPolicy
-      policy_associations = {
-        cluster_admin = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-          access_scope = {
-            type = "cluster"
-          }
-        }
-        eks_admin = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-          access_scope = {
-            type = "cluster"
-          }
-        }
-      }
-    }
-  }
+  access_entries = local.access_entries
 
   node_security_group_additional_rules = {}
   eks_managed_node_groups = {
