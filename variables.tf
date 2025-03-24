@@ -40,7 +40,7 @@ variable "max_size" {
 
 variable "desired_size" {
   type        = number
-  default     = 2
+  default     = 3
   description = "The desired number of nodes in the managed node group."
 }
 
