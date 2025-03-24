@@ -31,6 +31,8 @@ module "external_dns_irsa" {
       namespace_service_accounts = ["${local.external_dns.namespace}:external-dns"]
     }
   }
+
+  tags = local.tags
 }
 
 resource "helm_release" "external_dns" {

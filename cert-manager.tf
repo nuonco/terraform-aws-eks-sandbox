@@ -23,6 +23,8 @@ module "cert_manager_irsa" {
       namespace_service_accounts = ["${local.cert_manager.namespace}:${local.cert_manager.name}"]
     }
   }
+
+  tags = local.tags
 }
 
 resource "helm_release" "cert_manager" {

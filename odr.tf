@@ -34,4 +34,6 @@ module "odr_iam_role" {
     aws_iam_policy.odr,
     module.eks,
   ]
+
+  tags = local.tags
 }

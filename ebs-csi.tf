@@ -18,6 +18,8 @@ module "ebs_csi_irsa" {
       namespace_service_accounts = ["${local.ebs_csi.name}:${local.ebs_csi.name}-sa"]
     }
   }
+
+  tags = local.tags
 }
 
 resource "helm_release" "ebs_csi" {

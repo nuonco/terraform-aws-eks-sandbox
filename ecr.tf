@@ -14,4 +14,6 @@ module "ecr" {
   repository_encryption_type      = "KMS"
   repository_image_scan_on_push   = false
   repository_force_delete         = true
+
+  tags = local.tags
 }

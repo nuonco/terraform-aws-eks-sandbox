@@ -19,6 +19,8 @@ module "alb_controller_irsa" {
       namespace_service_accounts = ["alb-ingress:${local.aws_alb_controller.service_account_name}"]
     }
   }
+
+  tags = local.tags
 }
 
 resource "helm_release" "alb-ingress-controller" {
