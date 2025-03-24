@@ -48,4 +48,6 @@ module "vpc" {
     "kubernetes.io/role/internal-elb"             = 1
     "visibility"                                  = "private"
   }
+
+  tags = local.tags
 }
