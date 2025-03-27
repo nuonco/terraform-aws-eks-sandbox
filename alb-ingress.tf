@@ -22,7 +22,6 @@ module "alb_controller_irsa" {
 
   tags = local.tags
 }
-
 resource "helm_release" "alb-ingress-controller" {
   namespace        = "alb-ingress"
   create_namespace = true
@@ -60,6 +59,16 @@ resource "helm_release" "alb-ingress-controller" {
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = module.alb_controller_irsa.iam_role_arn
+  }
+
+  set { // we only set this one tag in case any of the others (in local.tags) conflict.
+    name  = "defaultTags.nuon_install_id"
+    value = var.nuon_id
+  }
+
+  set { // we only set this one tag in case any of the others (in local.tags) conflict.
+    name  = "defaultTags.created_by"
+    value = "alb-ingress-controller"
   }
 
   depends_on = [
