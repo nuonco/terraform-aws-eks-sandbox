@@ -39,8 +39,11 @@ output "vpc" {
     public_subnet_cidr_blocks = module.vpc.public_subnets_cidr_blocks
     public_subnet_ids         = module.vpc.public_subnets
     default_security_group_id = module.vpc.default_security_group_id
+
+    nat_ids        = module.vpc.nat_ids    
+    nat_public_ips = module.vpc.nat_public_ips
   }
-  description = "A map of vpc attributes: name, id, cidr, azs, private_subnet_cidr_blocks, private_subnet_ids, public_subnet_cidr_blocks, public_subnet_ids, default_security_group_id."
+  description = "A map of vpc attributes: name, id, cidr, azs, private_subnet_cidr_blocks, private_subnet_ids, public_subnet_cidr_blocks, public_subnet_ids, default_security_group_id, nat_ids, nat_public_ips."
 }
 
 output "account" {
