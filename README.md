@@ -1,30 +1,35 @@
-# aws-eks-sandbox
+# m1 aws-eks-sandbox
 
 Turnkey AWS EKS sandbox for Nuon apps.
 
 ## Usage
 
-This module can be used via the
-[aws-eks](https://github.com/nuonco/sandboxes/tree/main/aws-eks) project in
-[nuonco/sandboxes](https://github.com/nuonco/sandboxes).
+## Components
 
-```hcl
-resource "nuon_app" "my_eks_app" {
-  name = "my_eks_app"
-}
+### Managed Here
 
-resource "nuon_app_sandbox" "main" {
-  app_id            = nuon_app.my_eks_app.id
-  terraform_version = "v1.7.5"
-  public_repo = {
-    repo      = "nuonco/sandboxes"
-    branch    = "main"
-    directory = "aws-eks"
-  }
-}
+1. EKS
+2. ECR
 
-resource "nuon_app_runner" "main" {
-  app_id      = nuon_app.my_eks_app.id
-  runner_type = "aws-eks"
-}
-```
+### Helm
+
+1. EBS CSI
+2. Metrics Server
+
+### Manged with details from cloduformation
+
+1. VPC
+2. DNS
+
+### Components that may be moved to components
+
+1. External DNS
+2. Cert Manager
+3. ALB Ingress
+4. Nginx Ingress
+
+## Notes
+
+### Runner Role
+
+This is external now. We now just create an access entry for it.

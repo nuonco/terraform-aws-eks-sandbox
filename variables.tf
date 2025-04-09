@@ -1,29 +1,54 @@
 locals {
-  install_name   = (var.install_name != "" ? var.install_name : var.cluster_name)
-  install_region = var.region
+  # private_subnet_ids = split(",", var.private_subnet_ids)
+  # public_subnet_ids  = split(",", var.public_subnet_ids)
   tags = merge(
     var.tags,
-    { nuon_id = var.nuon_id },
+    {
+      "nuon.co/id" = var.nuon_id
+    },
     var.additional_tags,
   )
 }
 
-variable "install_name" {
+#
+# from cloudformation
+#
+variable "vpc_id" {
   type        = string
-  description = "The name of this install. Will be used for the EKS cluster, various tags, and other resources."
-  default     = ""
+  description = "The ID of the AWS VPC to provision the sandbox in."
 }
 
-variable "cluster_name" {
+variable "runner_iam_role_arn" {
   type        = string
-  description = "The name of the EKS cluster. Will use the install ID by default."
-  default     = ""
+  description = "The role that is used by the runner, and should be granted access to the cluster."
 }
 
+# variable "public_subnet_ids" {
+#   type        = string
+#   description = "Comma separated list of public subnet ds."
+#   default     = ""
+# }
+
+# variable "private_subnet_ids" {
+#   type        = string
+#   description = "Comma separated list of private subnet ids."
+#   default     = ""
+# }
+
+#
+# install inputs
+#
 variable "cluster_version" {
   type        = string
   description = "The Kubernetes version to use for the EKS cluster."
   default     = "1.32"
+}
+
+
+variable "cluster_name" {
+  type        = string
+  description = "The name of the EKS cluster. If not provided, the install ID will be used by default."
+  default     = ""
 }
 
 variable "min_size" {
@@ -50,14 +75,21 @@ variable "default_instance_type" {
   description = "The EC2 instance type to use for the EKS cluster's default node group."
 }
 
+variable "admin_access_role" {
+  type        = string
+  default     = ""
+  description = "A role that be granted access cluster AmazonEKSAdminPolicy and AmazonEKSClusterAdminPolicy access."
+}
+
 variable "additional_tags" {
   type        = map(any)
   description = "Extra tags to append to the default tags that will be added to install resources."
   default     = {}
 }
 
-# Automatically set by Nuon when provisioned.
-
+#
+# set by nuon
+#
 variable "nuon_id" {
   type        = string
   description = "The nuon id for this install. Used for naming purposes."
@@ -65,25 +97,16 @@ variable "nuon_id" {
 
 variable "region" {
   type        = string
-  description = "The region to launch the cluster in"
+  description = "The region to launch the cluster in."
 }
 
-variable "waypoint_odr_namespace" {
-  type        = string
-  description = "Namespace in which the ODR IAM Role's service account presides."
-}
-
-variable "waypoint_odr_service_account_name" {
-  type        = string
-  description = "Service account which the ODR IAM Role should be assumable from."
-}
-
+# DNS
 variable "public_root_domain" {
   type        = string
   description = "The public root domain."
 }
 
-// NOTE: if you would like to create an internal load balancer, with TLS, you will have to use the public domain.
+# NOTE: if you would like to create an internal load balancer, with TLS, you will have to use the public domain.
 variable "internal_root_domain" {
   type        = string
   description = "The internal root domain."
@@ -92,21 +115,4 @@ variable "internal_root_domain" {
 variable "tags" {
   type        = map(any)
   description = "List of custom tags to add to the install resources. Used for taxonomic purposes."
-}
-
-variable "enable_nginx_ingress_controller" {
-  type        = string
-  default     = "true"
-  description = "Toggle the nginx-ingress controller in the EKS cluster."
-}
-
-variable "runner_install_role" {
-  type        = string
-  description = "The role that is used to install the runner, and should be granted access."
-}
-
-variable "admin_access_role" {
-  type        = string
-  default     = ""
-  description = "A role that be granted access cluster AmazonEKSAdminPolicy and AmazonEKSClusterAdminPolicy access."
 }

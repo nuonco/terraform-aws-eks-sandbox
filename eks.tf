@@ -1,5 +1,5 @@
 locals {
-  cluster_name    = (var.cluster_name != "" ? var.cluster_name : var.nuon_id)
+  cluster_name    = substr((var.cluster_name != "" ? var.cluster_name : var.nuon_id), 0, 38)
   cluster_version = var.cluster_version
 
   instance_types = [var.default_instance_type]
@@ -8,10 +8,9 @@ locals {
   desired_size   = var.desired_size
 
   // access entries
-
   default_access_entries = {
     "install:{{SessionName}}" = {
-      principal_arn     = var.runner_install_role
+      principal_arn     = var.runner_iam_role_arn
       kubernetes_groups = [] # superceded by AmazonEKSClusterAdminPolicy
       policy_associations = {
         cluster_admin = {
@@ -53,25 +52,21 @@ locals {
   )
 }
 
-provider "aws" {
-  region = local.install_region
-}
-
 resource "aws_kms_key" "eks" {
   description = "Key for ${local.cluster_name} EKS cluster"
 }
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.24.3"
+  version = "~> 20.35.0"
 
   cluster_name                    = local.cluster_name
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
 
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnets
+  vpc_id     = data.aws_vpc.id
+  subnet_ids = data.aws_vpc.private_subnets
 
   create_kms_key = false
   cluster_encryption_config = {
@@ -90,11 +85,11 @@ module "eks" {
   }
 
   authentication_mode                      = "API_AND_CONFIG_MAP"
+  access_entries                           = local.access_entries
   enable_cluster_creator_admin_permissions = false
 
-  access_entries = local.access_entries
-
   node_security_group_additional_rules = {}
+
   eks_managed_node_groups = {
     default = {
       instance_types = local.instance_types
@@ -108,7 +103,5 @@ module "eks" {
     }
   }
 
-  # this can't rely on default_tags.
-  # full set of tags must be specified here :sob:
   tags = local.tags
 }

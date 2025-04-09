@@ -1,9 +1,9 @@
-output "runner" {
+output "account" {
   value = {
-    odr_iam_role_arn    = module.odr_iam_role.iam_role_arn
-    runner_iam_role_arn = module.odr_iam_role.iam_role_arn
+    id     = data.aws_caller_identity.current.account_id
+    region = var.region
   }
-  description = "A map of runner attributes: odr_iam_role_arn."
+  description = "A map of AWS account attributes: id, region."
 }
 
 output "cluster" {
@@ -21,34 +21,28 @@ output "cluster" {
     cluster_security_group_id  = module.eks.cluster_security_group_id
     node_security_group_id     = module.eks.node_security_group_id
   }
-  description = "A map of EKS cluster attributes: arn, certificate_authority_data, endpoint, name, platform_version, status, oidc_issuer_url, cluster_security_group_id, node_security_group_id."
+  description = "A map of EKS cluster attributes: arn, certificate_authority_data, endpoint, name, platform_version, status, oidc_issuer_url, oidc_provider_arn, cluster_security_group_id, node_security_group_id."
 }
 
 output "vpc" {
-  // NOTE: these are declared here -
-  // https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest?tab=outputs
   value = {
-    name = module.vpc.name
-    id   = module.vpc.vpc_id
-    cidr = module.vpc.vpc_cidr_block
-    azs  = module.vpc.azs
+    // NOTE: these are declared here -
+    // https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc
+    name = data.aws_vpc.vpc.name
+    id   = data.aws_vpc.vpc.id
+    arn  = data.aws_vpc.vpc.arn
+    cidr = data.aws_vpc.vpc.cidr_block
+    azs  = data.aws_vpc.vpc.azs
 
-    private_subnet_cidr_blocks = module.vpc.private_subnets_cidr_blocks
-    private_subnet_ids         = module.vpc.private_subnets
+    // ensure the data resource will actually hand us this
+    private_subnet_cidr_blocks = data.aws_vpc.vpc.private_subnets_cidr_blocks
+    private_subnet_ids         = data.aws_vpc.vpc.private_subnets
 
-    public_subnet_cidr_blocks = module.vpc.public_subnets_cidr_blocks
-    public_subnet_ids         = module.vpc.public_subnets
-    default_security_group_id = module.vpc.default_security_group_id
+    public_subnet_cidr_blocks = data.aws_vpc.vpc.public_subnets_cidr_blocks
+    public_subnet_ids         = data.aws_vpc.vpc.public_subnets
+    default_security_group_id = data.aws_vpc.vpc.default_security_group_id
   }
   description = "A map of vpc attributes: name, id, cidr, azs, private_subnet_cidr_blocks, private_subnet_ids, public_subnet_cidr_blocks, public_subnet_ids, default_security_group_id."
-}
-
-output "account" {
-  value = {
-    id     = data.aws_caller_identity.current.account_id
-    region = var.region
-  }
-  description = "A map of AWS account attributes: id, region."
 }
 
 output "ecr" {
@@ -61,6 +55,7 @@ output "ecr" {
   }
   description = "A map of ECR attributes: repository_url, repository_arn, repository_name, registry_id, registry_url."
 }
+
 
 output "public_domain" {
   value = {
